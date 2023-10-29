@@ -15,10 +15,19 @@ namespace Retro.ThirdPersonCharacter
 
         public bool AttackInProgress {get; private set;} = false;
 
+        public GameObject fireballPrefab;
+
+        public GameObject meteorPrefab;
+
+        private GameObject childObj;
+
+        private float speed = 30000.0f;
         private void Start()
         {
             _animator = GetComponent<Animator>();
             _playerInput = GetComponent<PlayerInput>();
+            childObj = transform.GetChild(1).gameObject;
+
         }
 
         private void Update()
@@ -26,16 +35,22 @@ namespace Retro.ThirdPersonCharacter
             if(_playerInput.AttackInput && !AttackInProgress)
             {
                 Attack();
+                //ファイアーボールの生成
+                GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,Quaternion.identity);
+                Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
+                fireballRigidbody.AddForce(transform.forward *this.speed);
             }
             else if (_playerInput.SpecialAttackInput && !AttackInProgress)
             {
                 SpecialAttack();
+                //メテオの生成
+                GameObject Meteor = Instantiate(meteorPrefab);
             }
         }
 
         private void SetAttackStart()
         {
-            AttackInProgress = true;
+            AttackInProgress = true;             
         }
 
         private void SetAttackEnd()
