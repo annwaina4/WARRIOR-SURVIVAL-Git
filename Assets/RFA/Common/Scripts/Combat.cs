@@ -21,7 +21,7 @@ namespace Retro.ThirdPersonCharacter
 
         private GameObject childObj;
 
-        private float speed = 30000.0f;
+        //private float speed = 300.0f;
         private void Start()
         {
             _animator = GetComponent<Animator>();
@@ -36,15 +36,15 @@ namespace Retro.ThirdPersonCharacter
             {
                 Attack();
                 //ファイアーボールの生成
-                GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,Quaternion.identity);
-                Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
-                fireballRigidbody.AddForce(transform.forward *this.speed);
+                GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,this.transform.rotation);
+                //Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
+                //fireballRigidbody.AddForce(transform.forward *this.speed);
             }
             else if (_playerInput.SpecialAttackInput && !AttackInProgress)
             {
                 SpecialAttack();
                 //メテオの生成
-                GameObject Meteor = Instantiate(meteorPrefab);
+                GameObject Meteor = (GameObject)Instantiate(meteorPrefab, childObj.transform.position, this.transform.rotation);
             }
         }
 
