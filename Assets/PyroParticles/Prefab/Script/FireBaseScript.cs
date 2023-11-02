@@ -80,8 +80,9 @@ namespace DigitalRuby.PyroParticles
         protected virtual void Awake()
         {
             Starting = true;
-            int fireLayer = UnityEngine.LayerMask.NameToLayer("FireLayer");
-            UnityEngine.Physics.IgnoreLayerCollision(fireLayer, fireLayer);
+            //レイヤーが空白でも正常動作しており、挿入により不具合が起きないようコメントアウト
+            //int fireLayer = UnityEngine.LayerMask.NameToLayer("FireLayer");
+            //UnityEngine.Physics.IgnoreLayerCollision(fireLayer, fireLayer);
         }
 
         protected virtual void Start()
