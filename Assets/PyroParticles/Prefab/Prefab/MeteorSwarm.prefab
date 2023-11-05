@@ -4840,7 +4840,7 @@ MonoBehaviour:
   - {fileID: 4300002, guid: 371ed6c0dd75f6a4ebd1dfcb0b578b46, type: 3}
   - {fileID: 4300000, guid: 371ed6c0dd75f6a4ebd1dfcb0b578b46, type: 3}
   - {fileID: 4300010, guid: 371ed6c0dd75f6a4ebd1dfcb0b578b46, type: 3}
-  DestinationRadius: 25
+  DestinationRadius: 10
   Source: {x: 50, y: 100, z: -50}
   SourceRadius: 10
   TimeToImpact: 1
