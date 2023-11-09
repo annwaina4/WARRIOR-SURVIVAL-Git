@@ -27,6 +27,7 @@ public class MigoController : MonoBehaviour
     //攻撃用
     public GameObject attackPrefab;
     private GameObject childobj;
+    public GameObject effectPrefab;
 
     //------------------------------------------------------------------------------------------------------------------
     //スタート
@@ -186,6 +187,8 @@ public class MigoController : MonoBehaviour
         //攻撃の生成
         GameObject attack = Instantiate(attackPrefab, childobj.transform.position, this.transform.rotation);
         Destroy(attack.gameObject, 0.2f);
+        GameObject effect = Instantiate(effectPrefab, childobj.transform.position, this.transform.rotation);
+        Destroy(effect.gameObject, 0.5f);
     }
 
     //------------------------------------------------------------------------------------------------------------------

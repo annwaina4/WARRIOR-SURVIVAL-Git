@@ -8007,6 +8007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1629221968}
   attackPrefab: {fileID: 863526143504928361, guid: f1b2e91fb188a31488777c7ca2b59c05, type: 3}
+  effectPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
 --- !u!4 &832540138
 Transform:
   m_ObjectHideFlags: 0
@@ -25525,6 +25526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 705471847}
   attackPrefab: {fileID: 2662583849803193468, guid: 02fa859072cbceb449dde25aae189d36, type: 3}
+  effectPrefab: {fileID: 2965222256817593503, guid: a164e676dbbd6e54587237e619372c98, type: 3}
 --- !u!1 &4414871116573282536
 GameObject:
   m_ObjectHideFlags: 0
@@ -30740,6 +30742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 564560257}
   attackPrefab: {fileID: 7959462305135980509, guid: 561e599478772a34d8145c0502e80c42, type: 3}
+  effectPrefab: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
 --- !u!4 &5867439297857552573
 Transform:
   m_ObjectHideFlags: 0
@@ -35841,6 +35844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 296309385}
   attackPrefab: {fileID: 820581069238057174, guid: d82d3f44b326017438f9c648e6c7d9a7, type: 3}
+  effectPrefab: {fileID: 2944396702758532163, guid: e190bf97c041e58448af6b043116cba0, type: 3}
 --- !u!1 &8063432000993619488
 GameObject:
   m_ObjectHideFlags: 0
