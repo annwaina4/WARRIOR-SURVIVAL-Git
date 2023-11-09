@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Retro.ThirdPersonCharacter
 {
@@ -22,6 +23,12 @@ namespace Retro.ThirdPersonCharacter
         public float MaxSpeed = 10;
         private float DecelerationOnStop = 0.00f;
 
+        private int maxHP = 10;
+
+        private int nowHP;
+
+        public Slider slider;
+
 
         private void Start()
         {
@@ -29,6 +36,11 @@ namespace Retro.ThirdPersonCharacter
             _playerInput = GetComponent<PlayerInput>();
             _combat = GetComponent<Combat>();
             _characterController = GetComponent<CharacterController>();
+
+            //Sliderを最大にする
+            slider.value = 1;
+            //HPを最大HPと同じ値に
+            nowHP = maxHP;
         }
 
         private void Update()
@@ -78,6 +90,26 @@ namespace Retro.ThirdPersonCharacter
 
             _animator.SetFloat("InputX", lastMovementInput.x);
             _animator.SetFloat("InputY", lastMovementInput.y);
+        }
+
+        //衝突判定
+        private void OnTriggerEnter(Collider other)
+        {
+            //敵の攻撃
+            if(other.gameObject.tag=="Attack"&&nowHP>0)
+            {
+                GetComponent<Animator>().SetTrigger("damage");
+
+                nowHP--;
+
+                //HPをSliderに反映
+                slider.value = (float)nowHP / (float)maxHP;
+            }
+
+            if(nowHP<=0)
+            {
+                GetComponent<Animator>().SetBool("death", true);
+            }
         }
     }
 }

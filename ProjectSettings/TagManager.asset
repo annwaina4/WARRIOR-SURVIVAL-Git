@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Fireball
   - Meteor
+  - Attack
   layers:
   - Default
   - TransparentFX

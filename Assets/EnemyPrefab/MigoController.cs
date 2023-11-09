@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class MigoController : MonoBehaviour
@@ -17,7 +18,15 @@ public class MigoController : MonoBehaviour
 
     private GameObject player;
 
-    private int HP = 3;
+    private int maxHP = 3;
+
+    private int nowHP;
+
+    public Slider slider;
+
+    //攻撃用
+    public GameObject attackPrefab;
+    private GameObject childobj;
 
     //------------------------------------------------------------------------------------------------------------------
     //スタート
@@ -30,6 +39,13 @@ public class MigoController : MonoBehaviour
         this.myRigidbody = GetComponent<Rigidbody>();
 
         this.player = GameObject.Find("Player");
+
+        childobj = transform.Find("skillPoint").gameObject;
+
+        //Sliderを最大にする
+        slider.value = 1;
+        //HPを最大HPと同じ値に
+        nowHP = maxHP;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -75,13 +91,13 @@ public class MigoController : MonoBehaviour
         //**************************************************************************************************************
 
         //待機
-        if(stateNumber==0)
+        if (stateNumber == 0)
         {
             //プレーヤーの方向を向く
             this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
 
             //1秒経過
-            if(timeCounter>1.0f)
+            if (timeCounter > 1.0f)
             {
                 //タイマーリセット
                 timeCounter = 0f;
@@ -92,19 +108,32 @@ public class MigoController : MonoBehaviour
                 //状態の遷移（前進）
                 stateNumber = 1;
             }
+            //プレーヤーが近い時
+            else if (length < 2.0f)
+            {
+                //タイマーリセット
+                timeCounter = 0f;
+
+                //アニメーション　攻撃
+                this.myanimator.SetTrigger("attack");
+
+                //状態の遷移（攻撃）
+                stateNumber = 2;
+            }
+
         }
 
         //前進
-        else if(stateNumber==1)
+        else if (stateNumber == 1)
         {
             //プレーヤーの方向を向く
             this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
 
             //移動
-            myRigidbody.velocity = transform.forward * 2.0f;
+            myRigidbody.velocity = transform.forward * 4.5f;
 
             //5秒経過
-            if(timeCounter>5.0f)
+            if (timeCounter > 5.0f)
             {
                 timeCounter = 0f;
 
@@ -114,8 +143,49 @@ public class MigoController : MonoBehaviour
                 //状態の遷移（待機）
                 stateNumber = 0;
             }
+            //プレーヤーが近い時
+            else if (length < 2.0f)
+            {
+                //タイマーリセット
+                timeCounter = 0f;
+
+                //アニメーション　待機
+                this.myanimator.SetFloat("speed", 0);
+
+                //アニメーション　攻撃
+                this.myanimator.SetTrigger("attack");
+
+                //状態の遷移（攻撃
+                stateNumber = 2;
+            }
         }
 
+        else if (stateNumber == 2)
+        {
+            //攻撃モーション終わり
+            if (timeCounter > 1.2f)
+            {
+                //タイマーリセット
+                timeCounter = 0f;
+
+                //状態の遷移（待機）
+                stateNumber = 0;
+            }
+        }
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //攻撃イベント
+    //------------------------------------------------------------------------------------------------------------------
+
+    public void AttackEvent()
+    {
+        //Debug.Log("AttackEvent");
+
+        //攻撃の生成
+        GameObject attack = Instantiate(attackPrefab, childobj.transform.position, this.transform.rotation);
+        Destroy(attack.gameObject, 0.2f);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -126,26 +196,32 @@ public class MigoController : MonoBehaviour
         //Debug.Log("OnCollisionEnter:" + other.gameObject.tag);
 
         //ファイアーボール
-        if (other.gameObject.tag == "Fireball" && HP > 0)
+        if (other.gameObject.tag == "Fireball" && nowHP > 0)
         {
             this.myanimator.SetTrigger("damage");
 
-            HP--;
+            nowHP--;
+
+            //HPをSliderに反映
+            slider.value = (float)nowHP / (float)maxHP;
         }
-   
+
         //メテオ
-        if (other.gameObject.tag == "Meteor" && HP > 0)
+        if (other.gameObject.tag == "Meteor" && nowHP > 0)
         {
             this.myanimator.SetTrigger("damage");
 
-            HP -= 3;
+            nowHP -= 3;
+
+            //HPをSliderに反映
+            slider.value = (float)nowHP / (float)maxHP;
         }
 
         //Debug.Log("残りHP" + this.HP);
 
-        if (HP <= 0)
+        if (nowHP <= 0)
         {
-            this.myanimator.SetBool("death",true);
+            this.myanimator.SetBool("death", true);
 
             //ステートパターンを停止
             stateNumber = -1;
@@ -155,8 +231,8 @@ public class MigoController : MonoBehaviour
             //衝突をなくす
             GetComponent<CapsuleCollider>().enabled = false;
 
-            //５秒後に破棄
-            Destroy(this.gameObject, 5.0f);
+            //3秒後に破棄
+            Destroy(this.gameObject, 3.0f);
         }
     }
 }
