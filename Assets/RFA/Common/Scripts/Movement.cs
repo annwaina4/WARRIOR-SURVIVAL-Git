@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Retro.ThirdPersonCharacter
 {
@@ -23,11 +24,14 @@ namespace Retro.ThirdPersonCharacter
         public float MaxSpeed = 10;
         private float DecelerationOnStop = 0.00f;
 
-        private int maxHP = 10;
+        private int maxHP = 100;
 
         private int nowHP;
 
         public Slider slider;
+
+        //ゲーム終了
+        static public bool isEnd = false;
 
 
         private void Start()
@@ -47,13 +51,32 @@ namespace Retro.ThirdPersonCharacter
         {
             if (_animator == null) return;
 
-            if(_combat.AttackInProgress)
+            //ゲームオーバー？
+            if (isEnd)
             {
-                StopMovementOnAttack();
+                //リスタート処理
+
+                // クリックされたらシーンをロードする
+                if (Input.GetMouseButton(0))
+                {
+                    //static変数の初期化
+                    isEnd = false;
+                    //SampleSceneを読み込む
+                    SceneManager.LoadScene("SampleScene");
+
+
+                }
             }
             else
             {
-                Move();
+                if (_combat.AttackInProgress)
+                {
+                    StopMovementOnAttack();
+                }
+                else
+                {
+                    Move();
+                }
             }
 
         }
@@ -109,6 +132,12 @@ namespace Retro.ThirdPersonCharacter
             if(nowHP<=0)
             {
                 GetComponent<Animator>().SetBool("death", true);
+
+                //CanvasにGAMEOVERを表示
+                GameObject.Find("Canvas").GetComponent<UIController>().GameOver();
+
+                //ゲームオーバー
+                isEnd = true;
             }
         }
     }

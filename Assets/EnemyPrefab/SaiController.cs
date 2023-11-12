@@ -3,238 +3,263 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SaiController : MonoBehaviour
+namespace Retro.ThirdPersonCharacter
 {
-    //状態（ステートパターン）
-    private int stateNumber = 0;
-
-    //汎用タイマー
-    private float timeCounter = 0f;
-
-    private Animator myanimator;
-
-    private Rigidbody myRigidbody;
-
-    private GameObject player;
-
-    private int maxHP = 3;
-
-    private int nowHP;
-
-    public Slider slider;
-
-    //攻撃用
-    public GameObject attackPrefab;
-    private GameObject childobj;
-    public GameObject effectPrefab;
-
-    //------------------------------------------------------------------------------------------------------------------
-    //スタート
-    //------------------------------------------------------------------------------------------------------------------
-
-    void Start()
+    public class SaiController : MonoBehaviour
     {
-        this.myanimator = GetComponent<Animator>();
+        //状態（ステートパターン）
+        private int stateNumber = 0;
 
-        this.myRigidbody = GetComponent<Rigidbody>();
+        //汎用タイマー
+        private float timeCounter = 0f;
 
-        this.player = GameObject.Find("Player");
+        private Animator myanimator;
 
-        childobj = transform.Find("skillPoint").gameObject;
+        private Rigidbody myRigidbody;
 
-        //Sliderを最大にする
-        slider.value = 1;
-        //HPを最大HPと同じ値に
-        nowHP = maxHP;
-    }
+        private GameObject player;
 
-    //------------------------------------------------------------------------------------------------------------------
-    //オリジナル関数
-    //------------------------------------------------------------------------------------------------------------------
+        private int maxHP = 3;
 
-    //距離を求める
-    float getLength(Vector3 current, Vector3 target)
-    {
-        return Mathf.Sqrt(((current.x - target.x) * (current.x - target.x)) + ((current.z - target.z) * (current.z - target.z)));
-    }
+        private int nowHP;
 
-    //方向を求める ※オイラー（-180～0～+180)
-    float getEulerAngle(Vector3 current, Vector3 target)
-    {
-        Vector3 value = target - current;
-        return Mathf.Atan2(value.x, value.z) * Mathf.Rad2Deg; //ラジアン→オイラー
-    }
+        public Slider slider;
 
-    //方向を求める ※ラジアン
-    float getRadian(Vector3 current, Vector3 target)
-    {
-        Vector3 value = target - current;
-        return Mathf.Atan2(value.x, value.z);
-    }
+        //攻撃用
+        public GameObject attackPrefab;
+        private GameObject childobj;
+        public GameObject effectPrefab;
 
-    //------------------------------------------------------------------------------------------------------------------
-    //アップデート
-    //------------------------------------------------------------------------------------------------------------------
-    void Update()
-    {
-        //タイマー加算
-        timeCounter += Time.deltaTime;
+        //------------------------------------------------------------------------------------------------------------------
+        //スタート
+        //------------------------------------------------------------------------------------------------------------------
 
-        //方向を求める
-        float direction = getEulerAngle(this.transform.position, player.transform.position);
+        void Start()
+        {
+            this.myanimator = GetComponent<Animator>();
+
+            this.myRigidbody = GetComponent<Rigidbody>();
+
+            this.player = GameObject.Find("Player");
+
+            childobj = transform.Find("skillPoint").gameObject;
+
+            //Sliderを最大にする
+            slider.value = 1;
+            //HPを最大HPと同じ値に
+            nowHP = maxHP;
+        }
+
+        //------------------------------------------------------------------------------------------------------------------
+        //オリジナル関数
+        //------------------------------------------------------------------------------------------------------------------
 
         //距離を求める
-        float length = getLength(this.transform.position, player.transform.position);
-
-        //**************************************************************************************************************
-        //ここから状態処理
-        //**************************************************************************************************************
-
-        //待機
-        if (stateNumber == 0)
+        float getLength(Vector3 current, Vector3 target)
         {
-            //プレーヤーの方向を向く
-            this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
-
-            //1秒経過
-            if (timeCounter > 1.0f)
-            {
-                //タイマーリセット
-                timeCounter = 0f;
-
-                // アニメーション　前進
-                this.myanimator.SetFloat("speed", 1.0f);
-
-                //状態の遷移（前進）
-                stateNumber = 1;
-            }
-            //プレーヤーが近い時
-            else if (length < 2.0f)
-            {
-                //タイマーリセット
-                timeCounter = 0f;
-
-                //アニメーション　攻撃
-                this.myanimator.SetTrigger("handattack");
-
-                //状態の遷移（攻撃）
-                stateNumber = 2;
-            }
-
+            return Mathf.Sqrt(((current.x - target.x) * (current.x - target.x)) + ((current.z - target.z) * (current.z - target.z)));
         }
 
-        //前進
-        else if (stateNumber == 1)
+        //方向を求める ※オイラー（-180～0～+180)
+        float getEulerAngle(Vector3 current, Vector3 target)
         {
-            //プレーヤーの方向を向く
-            this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
+            Vector3 value = target - current;
+            return Mathf.Atan2(value.x, value.z) * Mathf.Rad2Deg; //ラジアン→オイラー
+        }
 
-            //移動
-            myRigidbody.velocity = transform.forward * 3.5f;
+        //方向を求める ※ラジアン
+        float getRadian(Vector3 current, Vector3 target)
+        {
+            Vector3 value = target - current;
+            return Mathf.Atan2(value.x, value.z);
+        }
 
-            //5秒経過
-            if (timeCounter > 5.0f)
+        //------------------------------------------------------------------------------------------------------------------
+        //アップデート
+        //------------------------------------------------------------------------------------------------------------------
+        void Update()
+        {
+            //タイマー加算
+            timeCounter += Time.deltaTime;
+
+            //方向を求める
+            float direction = getEulerAngle(this.transform.position, player.transform.position);
+
+            //距離を求める
+            float length = getLength(this.transform.position, player.transform.position);
+
+            //**************************************************************************************************************
+            //ここから状態処理
+            //**************************************************************************************************************
+
+            //待機
+            if (stateNumber == 0)
             {
-                timeCounter = 0f;
+                //プレーヤーの方向を向く
+                this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
 
+                //1秒経過
+                if (timeCounter > 1.0f)
+                {
+                    //タイマーリセット
+                    timeCounter = 0f;
+
+                    // アニメーション　前進
+                    this.myanimator.SetFloat("speed", 1.0f);
+
+                    //状態の遷移（前進）
+                    stateNumber = 1;
+                }
+                //プレーヤーが近い時
+                else if (length < 2.0f)
+                {
+                    //タイマーリセット
+                    timeCounter = 0f;
+
+                    //アニメーション　攻撃
+                    this.myanimator.SetTrigger("handattack");
+
+                    //状態の遷移（攻撃）
+                    stateNumber = 2;
+                }
+
+            }
+
+            //前進
+            else if (stateNumber == 1)
+            {
+                //プレーヤーの方向を向く
+                this.transform.rotation = Quaternion.Euler(0f, direction, 0f);
+
+                //移動
+                myRigidbody.velocity = transform.forward * 3.5f;
+
+                //5秒経過
+                if (timeCounter > 5.0f)
+                {
+                    timeCounter = 0f;
+
+                    //アニメーション　待機
+                    this.myanimator.SetFloat("speed", 0);
+
+                    //状態の遷移（待機）
+                    stateNumber = 0;
+                }
+                //プレーヤーが近い時
+                else if (length < 2.0f)
+                {
+                    //タイマーリセット
+                    timeCounter = 0f;
+
+                    //アニメーション　待機
+                    this.myanimator.SetFloat("speed", 0);
+
+                    //アニメーション　攻撃
+                    this.myanimator.SetTrigger("headattack");
+
+                    //状態の遷移（攻撃
+                    stateNumber = 2;
+                }
+            }
+
+            else if (stateNumber == 2)
+            {
+                //攻撃モーション終わり
+                if (timeCounter > 1.3f)
+                {
+                    //タイマーリセット
+                    timeCounter = 0f;
+
+                    //状態の遷移（待機）
+                    stateNumber = 0;
+                }
+            }
+
+            //**************************************************************************************************************
+            //ゲーム‐オーバー監視
+            //**************************************************************************************************************
+
+            if (Movement.isEnd)
+            {
                 //アニメーション　待機
                 this.myanimator.SetFloat("speed", 0);
 
-                //状態の遷移（待機）
-                stateNumber = 0;
+                //ステートパターンを停止
+                stateNumber = -1;
             }
-            //プレーヤーが近い時
-            else if (length < 2.0f)
+
+        }
+
+        //------------------------------------------------------------------------------------------------------------------
+        //攻撃イベント
+        //------------------------------------------------------------------------------------------------------------------
+
+        public void AttackEvent()
+        {
+            //Debug.Log("AttackEvent");
+
+            //攻撃の生成
+            GameObject attack = Instantiate(attackPrefab, childobj.transform.position, this.transform.rotation);
+            Destroy(attack.gameObject, 0.2f);
+            GameObject effect = Instantiate(effectPrefab, childobj.transform.position, this.transform.rotation);
+            Destroy(effect.gameObject, 0.5f);
+        }
+
+        //------------------------------------------------------------------------------------------------------------------
+        //衝突判定
+        //------------------------------------------------------------------------------------------------------------------
+        private void OnCollisionEnter(Collision other)
+        {
+            //Debug.Log("OnCollisionEnter:" + other.gameObject.tag);
+
+            //ファイアーボール
+            if (other.gameObject.tag == "Fireball" && nowHP > 0)
             {
-                //タイマーリセット
+                this.myanimator.SetTrigger("damage");
+
+                nowHP--;
+
                 timeCounter = 0f;
-
-                //アニメーション　待機
-                this.myanimator.SetFloat("speed", 0);
-
-                //アニメーション　攻撃
-                this.myanimator.SetTrigger("headattack");
-
-                //状態の遷移（攻撃
-                stateNumber = 2;
-            }
-        }
-
-        else if (stateNumber == 2)
-        {
-            //攻撃モーション終わり
-            if (timeCounter > 1.3f)
-            {
-                //タイマーリセット
-                timeCounter = 0f;
-
-                //状態の遷移（待機）
                 stateNumber = 0;
+
+                //HPをSliderに反映
+                slider.value = (float)nowHP / (float)maxHP;
             }
-        }
 
-    }
+            //メテオ
+            if (other.gameObject.tag == "Meteor" && nowHP > 0)
+            {
+                this.myanimator.SetTrigger("damage");
 
-    //------------------------------------------------------------------------------------------------------------------
-    //攻撃イベント
-    //------------------------------------------------------------------------------------------------------------------
+                nowHP -= 3;
 
-    public void AttackEvent()
-    {
-        //Debug.Log("AttackEvent");
+                //HPをSliderに反映
+                slider.value = (float)nowHP / (float)maxHP;
+            }
 
-        //攻撃の生成
-        GameObject attack = Instantiate(attackPrefab, childobj.transform.position, this.transform.rotation);
-        Destroy(attack.gameObject, 0.2f);
-        GameObject effect = Instantiate(effectPrefab, childobj.transform.position, this.transform.rotation);
-        Destroy(effect.gameObject, 0.5f);
-    }
+            //Debug.Log("残りHP" + this.HP);
 
-    //------------------------------------------------------------------------------------------------------------------
-    //衝突判定
-    //------------------------------------------------------------------------------------------------------------------
-    private void OnCollisionEnter(Collision other)
-    {
-        //Debug.Log("OnCollisionEnter:" + other.gameObject.tag);
+            if (nowHP <= 0)
+            {
+                this.myanimator.SetBool("death", true);
 
-        //ファイアーボール
-        if (other.gameObject.tag == "Fireball" && nowHP > 0)
-        {
-            this.myanimator.SetTrigger("damage");
+                //ステートパターンを停止
+                stateNumber = -1;
 
-            nowHP--;
+                //自由落下を停止
+                myRigidbody.useGravity = false;
+                //衝突をなくす
+                GetComponent<CapsuleCollider>().enabled = false;
 
-            //HPをSliderに反映
-            slider.value = (float)nowHP / (float)maxHP;
-        }
+                //スコア加算
+                GameObject.Find("Canvas").GetComponent<UIController>().AddScore(400);
 
-        //メテオ
-        if (other.gameObject.tag == "Meteor" && nowHP > 0)
-        {
-            this.myanimator.SetTrigger("damage");
+                //敵数カウントを減らす
+                GameObject.Find("EnemyGenerator").GetComponent<EnemyGenerator>().enemycounter--;
 
-            nowHP -= 3;
-
-            //HPをSliderに反映
-            slider.value = (float)nowHP / (float)maxHP;
-        }
-
-        //Debug.Log("残りHP" + this.HP);
-
-        if (nowHP <= 0)
-        {
-            this.myanimator.SetBool("death", true);
-
-            //ステートパターンを停止
-            stateNumber = -1;
-
-            //自由落下を停止
-            myRigidbody.useGravity = false;
-            //衝突をなくす
-            GetComponent<CapsuleCollider>().enabled = false;
-
-            //3秒後に破棄
-            Destroy(this.gameObject, 3.0f);
+                //3秒後に破棄
+                Destroy(this.gameObject, 3.0f);
+            }
         }
     }
 }

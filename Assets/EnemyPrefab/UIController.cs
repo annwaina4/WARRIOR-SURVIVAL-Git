@@ -1,18 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+namespace Retro.ThirdPersonCharacter
 {
-    GameObject player;
-    void Start()
+    public class UIController : MonoBehaviour
     {
-        this.player = GameObject.Find("Player");
-    }
+        private int score = 0;
 
-    
-    void Update()
-    {
-        
+        GameObject gameovertext;
+        GameObject scoretext;
+        void Start()
+        {
+            this.gameovertext = GameObject.Find("GameOverText");
+            this.scoretext = GameObject.Find("ScoreText");
+        }
+
+
+        void Update()
+        {
+
+        }
+
+        //スコア加算
+        public void AddScore(int value)
+        {
+            score += value;
+            //UI表示
+            this.scoretext.GetComponent<Text>().text = "Score  " + this.score + "pt";
+
+        }
+
+        public void GameOver()
+        {
+            //UI表示
+            this.gameovertext.GetComponent<Text>().text = "GAME OVER";
+        }
     }
 }

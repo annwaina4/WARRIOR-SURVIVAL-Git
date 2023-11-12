@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NaughtyCharacter
+namespace Retro.ThirdPersonCharacter
 {
 	public class PlayerCamera : MonoBehaviour
 	{
@@ -15,20 +15,24 @@ namespace NaughtyCharacter
 
 		private void LateUpdate() 
 		{
-			SetPosition(Target.transform.position);
-			Vector2 CameraInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-			UpdateControlRotation();
-			
-			// Adjust the pitch angle (X Rotation)
-			float pitchAngle = controllRotation.x;
-			pitchAngle -= CameraInput.y * ControlRotationSensitivity;
+			//ゲームオーバーしていないとき
+			if (Movement.isEnd == false)
+			{
+				SetPosition(Target.transform.position);
+				Vector2 CameraInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+				UpdateControlRotation();
 
-			// Adjust the yaw angle (Y Rotation)
-			float yawAngle = controllRotation.y;
-			yawAngle += CameraInput.x * ControlRotationSensitivity;
+				// Adjust the pitch angle (X Rotation)
+				float pitchAngle = controllRotation.x;
+				pitchAngle -= CameraInput.y * ControlRotationSensitivity;
 
-			controllRotation = new Vector2(pitchAngle, yawAngle);
-			SetControlRotation(controllRotation);
+				// Adjust the yaw angle (Y Rotation)
+				float yawAngle = controllRotation.y;
+				yawAngle += CameraInput.x * ControlRotationSensitivity;
+
+				controllRotation = new Vector2(pitchAngle, yawAngle);
+				SetControlRotation(controllRotation);
+			}
 		}
 
 		public void SetPosition(Vector3 position)

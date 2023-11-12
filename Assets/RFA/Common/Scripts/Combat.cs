@@ -36,7 +36,7 @@ namespace Retro.ThirdPersonCharacter
             {
                 Attack();
                 //ファイアーボールの生成
-                GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,this.transform.rotation);
+                //GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,this.transform.rotation);
                 //Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
                 //fireballRigidbody.AddForce(transform.forward *this.speed);
             }
@@ -66,6 +66,12 @@ namespace Retro.ThirdPersonCharacter
         private void SpecialAttack()
         {
             _animator.SetTrigger(specialAttackTriggerName);
+        }
+
+        private void AttackEvent()
+        {
+            //ファイアーボールの生成
+            GameObject fireball = (GameObject)Instantiate(fireballPrefab, childObj.transform.position, this.transform.rotation);
         }
     }
 }
