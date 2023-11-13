@@ -18,7 +18,7 @@ namespace Retro.ThirdPersonCharacter
         
         //敵の生成頻度
         float enemyTimecounter = 0f;
-        float span = 3.1f;
+        float span = 3.0f;
 
         //回復アイテムの生成数
         public int healCounter = 1;
