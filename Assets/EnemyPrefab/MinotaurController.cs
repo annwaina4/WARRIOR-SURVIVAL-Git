@@ -19,7 +19,7 @@ namespace Retro.ThirdPersonCharacter
 
         private GameObject player;
 
-        private int maxHP = 3;
+        private int maxHP = 12;
 
         private int nowHP;
 
@@ -218,7 +218,7 @@ namespace Retro.ThirdPersonCharacter
             {
                 this.myanimator.SetTrigger("damage");
 
-                nowHP--;
+                nowHP-=4;
 
                 timeCounter = 0f;
                 stateNumber = 0;
@@ -232,7 +232,7 @@ namespace Retro.ThirdPersonCharacter
             {
                 this.myanimator.SetTrigger("damage");
 
-                nowHP -= 3;
+                nowHP --;
 
                 //HP‚ðSlider‚É”½‰f
                 slider.value = (float)nowHP / (float)maxHP;
@@ -256,7 +256,7 @@ namespace Retro.ThirdPersonCharacter
                 GameObject.Find("EnemyGenerator").GetComponent<EnemyGenerator>().enemycounter--;
 
                 //ƒXƒRƒA‰ÁŽZ
-                GameObject.Find("Canvas").GetComponent<UIController>().AddScore(1000);
+                GameObject.Find("Canvas").GetComponent<UIController>().AddScore(1300);
 
                 //3•bŒã‚É”jŠü
                 Destroy(this.gameObject, 3.0f);

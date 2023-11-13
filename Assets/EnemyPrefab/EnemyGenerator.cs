@@ -2,49 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyGenerator : MonoBehaviour
+namespace Retro.ThirdPersonCharacter
 {
-    //“G‚Ì¶¬”
-    public int enemycounter = 0;
-
-    //“G‚Ì”z—ñ
-    public GameObject[] enemyprefab = new GameObject[4];
-
-    //¶¬êŠ‚Ì”z—ñ
-    public GameObject[] obeliskObject = new GameObject[4];
-
-    float timecounter = 0f;
-    float span = 3.0f;
-    
-    void Start()
+    public class EnemyGenerator : MonoBehaviour
     {
+        //“G‚Ì¶¬”
+        public int enemycounter = 0;
+
+
+        //“G‚Ì”z—ñ
+        public GameObject[] enemyprefab = new GameObject[4];
+
+        //¶¬êŠ‚Ì”z—ñ
+        public GameObject[] obeliskObject = new GameObject[4];
         
-    }
+        //“G‚Ì¶¬•p“x
+        float enemyTimecounter = 0f;
+        float span = 3.0f;
 
-    
-    void Update()
-    {
-        timecounter += Time.deltaTime;
+        //‰ñ•œƒAƒCƒeƒ€‚Ì¶¬”
+        public int healCounter = 1;
 
-        if (timecounter > span)
+        float healTimeConter = 0f;
+
+        public GameObject Healprefab;
+
+        
+
+        void Start()
         {
-            timecounter = 0f;
+            
+        }
 
-            if (enemycounter <= 10)
+        void Update()
+        {
+            enemyTimecounter += Time.deltaTime;
+            healTimeConter += Time.deltaTime;
+
+            if (Movement.isEnd == false)
             {
-                //‚Ç‚Ì“G‚ğ¶¬‚·‚é‚©‚Ì—”
-                int enemy = Random.Range(0, 4);
+                if (enemyTimecounter > span)
+                {
+                    enemyTimecounter = 0f;
 
-                //‚Ç‚ÌêŠ‚É¶¬‚·‚é‚©‚Ì—”
-                int respawn = Random.Range(0, 4);
+                    if (enemycounter <= 15)
+                    {
+                        //‚Ç‚Ì“G‚ğ¶¬‚·‚é‚©‚Ì—”
+                        int enemy = Random.Range(0, 4);
 
-                Instantiate(enemyprefab[enemy],obeliskObject[respawn].transform.transform.position,Quaternion.identity);
+                        //‚Ç‚ÌêŠ‚É¶¬‚·‚é‚©‚Ì—”
+                        int respawn = Random.Range(0, 4);
 
-                enemycounter++;
+                        Instantiate(enemyprefab[enemy], obeliskObject[respawn].transform.transform.position, Quaternion.identity);
+
+                        enemycounter++;
+                    }
+
+                }
+
+                if (healTimeConter > 15.0f)
+                {
+                    healTimeConter = 0f;
+
+                    if (healCounter < 1)
+                    {
+                        GameObject healCopy = Instantiate(Healprefab, new Vector3(3.68f, -3.9f, -0.69f), Quaternion.identity);
+
+                        healCounter++;
+                    }
+                }
             }
 
-        }
- 
+            //Debug.Log("‰ñ•œƒAƒCƒeƒ€‚Ì”F" + healCounter);
+            //Debug.Log("healTimeConterF" + healTimeConter);
 
+        }
     }
 }

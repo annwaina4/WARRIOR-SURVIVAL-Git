@@ -32,20 +32,24 @@ namespace Retro.ThirdPersonCharacter
 
         private void Update()
         {
-            if(_playerInput.AttackInput && !AttackInProgress)
+            if (Movement.isEnd == false)
             {
-                Attack();
-                //ファイアーボールの生成
-                //GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,this.transform.rotation);
-                //Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
-                //fireballRigidbody.AddForce(transform.forward *this.speed);
+                if (_playerInput.AttackInput && !AttackInProgress)
+                {
+                    Attack();
+                    //ファイアーボールの生成
+                    //GameObject fireball = (GameObject)Instantiate(fireballPrefab,childObj.transform.position,this.transform.rotation);
+                    //Rigidbody fireballRigidbody = fireball.GetComponent<Rigidbody>();
+                    //fireballRigidbody.AddForce(transform.forward *this.speed);
+                }
+                else if (_playerInput.SpecialAttackInput && !AttackInProgress)
+                {
+                    SpecialAttack();
+                    //メテオの生成
+                    GameObject Meteor = (GameObject)Instantiate(meteorPrefab, childObj.transform.position, this.transform.rotation);
+                }
             }
-            else if (_playerInput.SpecialAttackInput && !AttackInProgress)
-            {
-                SpecialAttack();
-                //メテオの生成
-                GameObject Meteor = (GameObject)Instantiate(meteorPrefab, childObj.transform.position, this.transform.rotation);
-            }
+            //Debug.Log("AttackInProgress" + AttackInProgress);
         }
 
         private void SetAttackStart()
@@ -73,5 +77,11 @@ namespace Retro.ThirdPersonCharacter
             //ファイアーボールの生成
             GameObject fireball = (GameObject)Instantiate(fireballPrefab, childObj.transform.position, this.transform.rotation);
         }
+
+        public void AttackInProgressClear()
+        {
+            AttackInProgress = false;
+        }
+
     }
 }
