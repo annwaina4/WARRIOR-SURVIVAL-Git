@@ -73,12 +73,14 @@ namespace Retro.ThirdPersonCharacter
                     //static変数の初期化
                     isEnd = false;
                     //SampleSceneを読み込む
-                    SceneManager.LoadScene("SampleScene");
-
+                    SceneManager.LoadScene("SampleScene");                    
 
                 }
                 //アニメーション　待機
-                GetComponent<Animator>().SetFloat("speed", 3);
+                //GetComponent<Animator>().SetFloat("speed", 3);
+                _animator.SetFloat("InputX", 0);
+                _animator.SetFloat("InputY", 0);
+
 
             }
             else
@@ -151,7 +153,10 @@ namespace Retro.ThirdPersonCharacter
 
             if (other.gameObject.tag == "Heal" )
             {
-                nowHP += (maxHP-nowHP);
+                nowHP =maxHP;
+                //HPをSliderに反映
+                slider.value = (float)nowHP / (float)maxHP;
+
                 Destroy(other.gameObject);
                 GameObject healEffect = Instantiate(healEffectPrefab, this.transform.position, Quaternion.identity);
                 
